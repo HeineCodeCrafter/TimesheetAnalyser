@@ -13,16 +13,41 @@ namespace TimesheetAnalyser.Models
         public TSA_Time()
         {
             Project = new TSA_Project();  
+        } 
+
+        public bool IsWeekend
+        {
+            get {
+                switch (Day.ToLower())
+                {
+                    case "mon":
+                    case "tue":
+                    case "wed":
+                    case "thu":
+                    case "fri":
+                        return false;
+                    case "sat":
+                    case "sun":
+                        return true;
+
+                    default:
+                        return false;
+                        
+                } 
+            
+            }
+
         }
+
         public string Day { get; set; }
         public double Hours { get; set; }
         public TSA_Project Project { get; set; }
 
-        
+
         public string Category { get; set; } 
          
         public string LineProperty { get; set; }
-
+        public bool ToMuch { get; internal set; }
 
         public override string ToString()
         {

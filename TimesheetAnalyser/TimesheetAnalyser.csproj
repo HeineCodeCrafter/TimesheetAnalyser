@@ -9,6 +9,11 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="7.4.2" />
+    <PackageReference Include="ScottPlot" Version="5.0.43" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Forms\" />
   </ItemGroup>
 
 </Project>

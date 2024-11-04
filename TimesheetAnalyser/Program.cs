@@ -1,21 +1,35 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using OfficeOpenXml;
+using ScottPlot;
 using System;
 using System.Data;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using TimesheetAnalyser.Models;
+using ScottPlot;
+
+
+ 
+// Example data 
 
 
 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 string pattern = @"^TSN\d{6}$";
-
+Console.ResetColor();
 // Ask user for the directory path
-
+Console.Clear();
 Console.WriteLine("I will devour all *.xlsx in this folder that follows formating matching: TSNnnnnnn");
 Console.Write("Please enter the directory path: "); 
 string directoryPath = Console.ReadLine();
+
+
+double compTimeOffset = 0.0;
+
+Console.Write("Comp.Time offset ");
+string compTimeOffset_input = Console.ReadLine();
+Double.TryParse(compTimeOffset_input, out compTimeOffset);
+
 
 // Check if the directory exists
 if (!Directory.Exists(directoryPath))
@@ -74,12 +88,11 @@ foreach (string filePath in filePaths)
                         double hours;
                         if (!double.TryParse(hour_data, out hours))
                         {
-                           Console.WriteLine($"Failed to properly cook the A5-beef the time given: {hour_data}");
+                            Console.WriteLine($"Failed to properly cook the A5 wagyu beef the time given: {hour_data}");
                             continue;
                         }
                         if (hours == 0.0)
-                        {
-                            //Console.WriteLine($"Not interested in undercoocked food: {hours}h");
+                        { 
                             continue;
                         } 
 
@@ -107,54 +120,28 @@ foreach (string filePath in filePaths)
                         if (existingDay != null)
                         { 
                             Console.WriteLine($" ..appended to {existingDay.TimeStamp:dd.MM.yyyy}.");
+                            existingDay.FoundIn = fileName;
                             existingDay.TimeRegister.Add(currentDay);
                         }
                         else
                         {
                             TSA_Day day = new TSA_Day();
                             day.TimeStamp = datetime;
-
+                            day.FoundIn = fileName;
                             day.TimeRegister.Add(currentDay);
 
                             Console.WriteLine($"Added {day.TimeStamp:dd.MM.yyyy}.");
                             days.Add(day); 
                         } 
-                        break;
+                        break; 
                     default:
                         continue;
                 }
             }
 
-            Console.WriteLine($"{fileName} tasted good.");
-            //TSA_Day? existingDay = days.FirstOrDefault(day => day.Date.Date == currentDay.Date);
-            //if (existingDay != null)
-            //{
-            //    // If the date already exists, add the time entries to the existing TimeRegister
-            //    existingDay.TimeRegister.AddRange(currentDay.TimeRegister);
-            //}
-            //else
-            //{
-            //    TSA_Day day = new TSA_Day();
-            //    day.TimeRegister timeRegister
-            //                // If the date is not found, add the new TSA_Day to the list
-            //                days.Add(datetime);
-            //}
-
-            //foreach (KeyValuePair<string, DateTime> day in dayColumns)
-            //{
-
-            //}
-            //DataRow newRow = table.NewRow();
-            //for (int col = 1; col <= worksheet.Dimension.End.Column; col++)
-            //{
-
-
-            //    //newRow[col - 1] = worksheet.Cells[row, col].Text;
-            //}
-            //table.Rows.Add(newRow);
+            Console.WriteLine($"{fileName} tasted good."); 
         }
-
-        //tables.Add(table);
+         
     }
 
     Console.WriteLine($"I've devoured on {fileName}.");
@@ -176,113 +163,107 @@ double totalOvertimeQ = 0.0;
 double totalVacation = 0.0;
 
 foreach (TSA_Day item in days)
-{
-    Console.WriteLine("");
-
+{ 
     double comptime = item.GetHourSumForType(E_LinePropertyFilter.CompTime);
     double overtimeS = item.GetHourSumForType(E_LinePropertyFilter.OvertimeS);
     double overtimeQ = item.GetHourSumForType(E_LinePropertyFilter.OvertimeQ);
-    double vacationDay = item.GetHourSumForType(E_LinePropertyFilter.Vacation); 
+    double vacationDay = item.GetHourSumForType(E_LinePropertyFilter.Vacation);
 
-    Console.WriteLine($"{item.TimeStamp.ToString("dd.MM.yyy"),-25} {item.TotalHours,-5} entries: {item.TimeRegister.Count,-25}");
+    DayOfWeek dow = item.TimeStamp.DayOfWeek;
 
+    switch (dow)
+    { 
+        case DayOfWeek.Monday: 
+        case DayOfWeek.Tuesday: 
+        case DayOfWeek.Wednesday: 
+        case DayOfWeek.Thursday:
+        case DayOfWeek.Friday:
+
+            break;
+        case DayOfWeek.Saturday:
+        case DayOfWeek.Sunday: 
+        default:
+            break;
+    }
     bool printEntries = false;
     if (comptime != 0.0)
     {
-        Console.WriteLine($"\tComp.time: {comptime,-25} h");
         totalCompTime += comptime;
         printEntries = true;
     }
     if (overtimeS != 0.0)
     {
-        Console.WriteLine($"\tOvertime  50%: {overtimeS,-25} h");
         totalOvertimeS += overtimeS;
         printEntries = true;
     }
     if (overtimeQ != 0.0)
     {
-        Console.WriteLine($"\tOvertime 100%: {overtimeQ,-25} h");
         totalOvertimeQ += overtimeQ;
         printEntries = true;
     }
     if (vacationDay != 0.0)
     {
-        Console.WriteLine($"\tVacation : {vacationDay,-25} days");
         totalVacation += vacationDay;
         printEntries = true;
     }
     if (printEntries)
     {
 
+        Console.Write($"{item.TimeStamp.ToString("dd.MM.yyy"),-15}{item.FoundIn,-10}{dow.ToString(),-15}");
+        Console.Write($"{item.TotalHours,-5} ");
+        Console.WriteLine($"entries: {item.TimeRegister.Count,-25}");
+
+
+
+        Console.WriteLine($"\tComp.time: {comptime}\t\tVacation: {vacationDay} days");
+          
+
         foreach (var t in item.TimeRegister)
         {
+            Console.ResetColor();
+
+            if (t.ToMuch)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+            }
             Console.WriteLine($"\t{t.Project.PID,-25} {t.Hours,-5} {t.Project.PName,-65} ( {t.LineProperty})");
+
+
+            Console.ResetColor();
         }
     }
     //Console.WriteLine(item.TimeStamp);
 }
 
+Console.ResetColor();
 Console.WriteLine("");
 Console.WriteLine("Summary");
-Console.WriteLine($"Comp.Time : {totalCompTime}");
+Console.WriteLine($"Comp.Time : {totalCompTime + compTimeOffset}");
 Console.WriteLine($"Overtime  50% : {totalOvertimeS}");
 Console.WriteLine($"Overtime 100% : {totalOvertimeQ}");
 Console.WriteLine($"Vacation days : {totalVacation}");
+
+
+// Get the desktop path
+string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+string export_filePath = Path.Combine(desktopPath, "output_day.csv");
+
+// Write to CSV file
+using (StreamWriter writer = new StreamWriter(export_filePath))
+{
+    // Write CSV headers
+    writer.WriteLine("DateTime;FoundIn;TotalHours;LineProperty;Project");
+
+    foreach (TSA_Day item in days)
+    {
+        foreach (var t in item.TimeRegister)
+        { 
+            writer.WriteLine($"{item.TimeStamp:dd.MM.yyyy};{item.FoundIn};{t.Hours};{t.LineProperty};{t.Project.PID} {t.Project.PName}");
+        }
+        //writer.WriteLine($"{item.TimeStamp:dd.MM.yyyy},{item.FoundIn},{dow},{item.TotalHours},{comptime},{overtimeS},{overtimeQ},{vacationDay},{pName}");
+    }
+}
+
 Console.ReadLine();
 
-// Now 'tables' contains a list of DataTables with the data from each Excel file.
-// Here, you can process or merge these tables as needed.
-//foreach (var table in tables)
-//{
-//    PrintTable(table); // Function to print table contents to console
-//}
-
-//static void PrintTable(DataTable table)
-//{
-//    Console.WriteLine(string.Join("\t", table.Columns.Cast<DataColumn>().Select(c => c.ColumnName)));
-//    foreach (DataRow row in table.Rows)
-//    {
-//        Console.WriteLine(string.Join("\t", row.ItemArray));
-//    }
-//}
-
-//DataTable table = new DataTable();
-
-//Dictionary<string,DateTime> dayColumns = new Dictionary<string, DateTime> ();
-
-//// Look for headers, and create the days available in this document
-//for (int header_column = 1; header_column <= worksheet.Dimension.End.Column; header_column++)
-//{
-
-//    string colum_data = worksheet.Cells[1, header_column].Text; 
-//    string colum_data_dayName = colum_data.Split(' ').FirstOrDefault();
-//    switch (colum_data_dayName.ToLower())
-//    {
-//        case "mon":
-//        case "tue":
-//        case "wed":
-//        case "thu":
-//        case "fri":
-//        case "sat":
-//        case "sun": 
-//            string datePart = colum_data.Substring(colum_data.IndexOf(' ') + 1); 
-//            string fullDate = datePart + "." + year; 
-//            DateTime datetime = DateTime.ParseExact(fullDate, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-
-//            if (dayColumns.ContainsKey(colum_data_dayName))
-//            {
-//                Console.WriteLine($"Day already exist in dictionary: {colum_data} in {filePath}");
-//                // nope, dictionary
-//                continue;
-//            }
-
-//            Console.WriteLine($"Day added: {colum_data_dayName} => {datetime} from {filePath}");
-//            dayColumns.Add(colum_data_dayName.ToLower(), datetime);
-//            break;
-//        default:
-//            continue;
-//    }
-
-
-//}
-// Work 
+ 
