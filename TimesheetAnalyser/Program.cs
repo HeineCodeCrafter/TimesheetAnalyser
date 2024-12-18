@@ -23,12 +23,43 @@ Console.WriteLine("I will devour all *.xlsx in this folder that follows formatin
 Console.Write("Please enter the directory path: "); 
 string directoryPath = Console.ReadLine();
 
+Console.Write("Print all timesheets? Y/N:\t");
+string printAll = Console.ReadLine();
+bool overtidePrintAll = false;
+if (printAll.ToLower()=="y")
+{
+    overtidePrintAll = true;
+}
 
 double compTimeOffset = 0.0;
+
+
+Console.WriteLine("Example:\n" +
+    "41 - hour comp. time\n" +
+    "31.07 - No summarization if time is exceeding normal working hours\n\n");
 
 Console.Write("Comp.Time offset ");
 string compTimeOffset_input = Console.ReadLine();
 Double.TryParse(compTimeOffset_input, out compTimeOffset);
+
+DateTime dateTime = DateTime.MinValue;
+string compTimeOffsetDueTime_input = "";
+if (compTimeOffset != 0)
+{// 
+     
+    Console.Write("Comp.Time Due Time (does not summarize comp.time before this date)\n Format: DD.MM\nYour Comp.time due date: ");
+    compTimeOffsetDueTime_input = Console.ReadLine();
+    //DateTime dateTime = DateTime.Now;
+    DateTime.TryParse(compTimeOffsetDueTime_input, out dateTime);
+}
+
+
+Console.Write("Type in exclude date limit. 01.12 ignores all entries from (including) 01.12:\t");
+string lastMonth = Console.ReadLine();
+DateTime excludeDate = DateTime.MaxValue;
+
+DateTime.TryParse(lastMonth, out excludeDate);
+
 
 
 // Check if the directory exists
@@ -162,8 +193,16 @@ double totalOvertimeS = 0.0;
 double totalOvertimeQ = 0.0;
 double totalVacation = 0.0;
 
+bool compTimeSummary = false;
+
+
 foreach (TSA_Day item in days)
-{ 
+{
+    //if (!compTimeSummary)
+    //{
+    //    compTimeSummary = true;
+    //    Console.WriteLine($"Starting summery of daily CompTime. Total: {totalCompTime} (totalCompTime)");
+    //}
     double comptime = item.GetHourSumForType(E_LinePropertyFilter.CompTime);
     double overtimeS = item.GetHourSumForType(E_LinePropertyFilter.OvertimeS);
     double overtimeQ = item.GetHourSumForType(E_LinePropertyFilter.OvertimeQ);
@@ -185,11 +224,23 @@ foreach (TSA_Day item in days)
         default:
             break;
     }
+
+    if (excludeDate <= item.TimeStamp)
+    {
+
+        Console.WriteLine($"{item.TimeStamp.ToString("dd.MM.yyy"),-15}{item.FoundIn,-10}{dow.ToString(),-15} \t\tEXCLUDED: Is after {excludeDate.ToString("dd.MM.yyy")} ");
+        continue;
+    }
+
     bool printEntries = false;
     if (comptime != 0.0)
     {
-        totalCompTime += comptime;
-        printEntries = true;
+        if (dateTime < item.TimeStamp)
+        {
+
+            totalCompTime += comptime;
+            printEntries = true;
+        } 
     }
     if (overtimeS != 0.0)
     {
@@ -206,16 +257,14 @@ foreach (TSA_Day item in days)
         totalVacation += vacationDay;
         printEntries = true;
     }
-    if (printEntries)
+    if (printEntries || overtidePrintAll)
     {
 
         Console.Write($"{item.TimeStamp.ToString("dd.MM.yyy"),-15}{item.FoundIn,-10}{dow.ToString(),-15}");
         Console.Write($"{item.TotalHours,-5} ");
         Console.WriteLine($"entries: {item.TimeRegister.Count,-25}");
-
-
-
-        Console.WriteLine($"\tComp.time: {comptime}\t\tVacation: {vacationDay} days");
+         
+        Console.WriteLine($"\tComp.time: {comptime}\t\tVacation: {vacationDay} days\t\ttotalCompTime: {totalCompTime}");
           
 
         foreach (var t in item.TimeRegister)
@@ -238,7 +287,8 @@ foreach (TSA_Day item in days)
 Console.ResetColor();
 Console.WriteLine("");
 Console.WriteLine("Summary");
-Console.WriteLine($"Comp.Time : {totalCompTime + compTimeOffset}");
+Console.WriteLine($"Comp.Time : {totalCompTime} - (summarized only for compTime AFTER {dateTime})");
+Console.WriteLine($"Comp.Time Total : {totalCompTime + compTimeOffset} (added in comptime {compTimeOffset})");
 Console.WriteLine($"Overtime  50% : {totalOvertimeS}");
 Console.WriteLine($"Overtime 100% : {totalOvertimeQ}");
 Console.WriteLine($"Vacation days : {totalVacation}");
@@ -263,6 +313,7 @@ using (StreamWriter writer = new StreamWriter(export_filePath))
         //writer.WriteLine($"{item.TimeStamp:dd.MM.yyyy},{item.FoundIn},{dow},{item.TotalHours},{comptime},{overtimeS},{overtimeQ},{vacationDay},{pName}");
     }
 }
+
 
 Console.ReadLine();
 
