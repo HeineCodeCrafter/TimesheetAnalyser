@@ -47,7 +47,7 @@ string compTimeOffsetDueTime_input = "";
 if (compTimeOffset != 0)
 {// 
      
-    Console.Write("Comp.Time Due Time (does not summarize comp.time before this date)\n Format: DD.MM\nYour Comp.time due date: ");
+    Console.Write("Comp.Time Due Time (does not summarize comp.time before this date)\n Format: DD.MM.YY\nYour Comp.time due date: ");
     compTimeOffsetDueTime_input = Console.ReadLine();
     //DateTime dateTime = DateTime.Now;
     DateTime.TryParse(compTimeOffsetDueTime_input, out dateTime);
@@ -203,6 +203,10 @@ foreach (TSA_Day item in days)
     //    compTimeSummary = true;
     //    Console.WriteLine($"Starting summery of daily CompTime. Total: {totalCompTime} (totalCompTime)");
     //}
+    if (item.FoundIn.Contains("TSN000352"))
+    {
+
+    }
     double comptime = item.GetHourSumForType(E_LinePropertyFilter.CompTime);
     double overtimeS = item.GetHourSumForType(E_LinePropertyFilter.OvertimeS);
     double overtimeQ = item.GetHourSumForType(E_LinePropertyFilter.OvertimeQ);

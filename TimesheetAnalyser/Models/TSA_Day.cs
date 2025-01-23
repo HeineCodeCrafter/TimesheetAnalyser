@@ -55,7 +55,6 @@ namespace TimesheetAnalyser.Models
                         break;
 
                     case E_LinePropertyFilter.CompTime:
-
                         CalculateCompensationHours(entry, ref sum, ref negativeCompensation, normalHourOffset);
                         if (sum > normalHourOffset)
                         {
@@ -92,7 +91,7 @@ namespace TimesheetAnalyser.Models
 
         private double CalculateVacationHours(TSA_Time entry)
         {
-            if (entry.Category.Equals("vacation", StringComparison.OrdinalIgnoreCase) && entry.Hours != 7.5)
+            if (entry.Category.Contains("vacation", StringComparison.OrdinalIgnoreCase) && entry.Hours != 7.5)
             {
                 return 1; // Add 1 hour for vacation if criteria match
             }
@@ -101,7 +100,7 @@ namespace TimesheetAnalyser.Models
 
         private void CalculateCompensationHours(TSA_Time entry, ref double sum, ref double negativeComp, double normalHourOffset)
         {
-            if (entry.LineProperty.Equals("overtime", StringComparison.OrdinalIgnoreCase)) return;
+            if (entry.LineProperty.Contains("overtime", StringComparison.OrdinalIgnoreCase)) return;
             if (entry.Project.PID == "AB000001" && entry.Category.ToLower().Contains("comp time") )
             {
                 negativeComp += entry.Hours;
@@ -111,7 +110,7 @@ namespace TimesheetAnalyser.Models
 
         private double CalculateOvertimeHours(TSA_Time entry, string overtimeType)
         {
-            return entry.LineProperty.Equals(overtimeType, StringComparison.OrdinalIgnoreCase) ? entry.Hours : 0;
+            return entry.LineProperty.Contains(overtimeType, StringComparison.OrdinalIgnoreCase) ? entry.Hours : 0;
         }
         internal double GetHourSumForType_okld(E_LinePropertyFilter linepropertyy)
         {
