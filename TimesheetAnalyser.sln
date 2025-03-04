@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimesheetAnalyser", "TimesheetAnalyser\TimesheetAnalyser.csproj", "{D8655A84-18D0-4623-ADC5-6EEEE6B23649}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualizedTimeSheets", "VisualizedTimeSheets\VisualizedTimeSheets.csproj", "{724307FA-C00B-4204-AD1B-5ADAB04F272F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D8655A84-18D0-4623-ADC5-6EEEE6B23649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8655A84-18D0-4623-ADC5-6EEEE6B23649}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8655A84-18D0-4623-ADC5-6EEEE6B23649}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8655A84-18D0-4623-ADC5-6EEEE6B23649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{724307FA-C00B-4204-AD1B-5ADAB04F272F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{724307FA-C00B-4204-AD1B-5ADAB04F272F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{724307FA-C00B-4204-AD1B-5ADAB04F272F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{724307FA-C00B-4204-AD1B-5ADAB04F272F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
