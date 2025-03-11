@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btn_export_current_period = new System.Windows.Forms.Button();
             this.lbl_report_summary = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.dtp_report_start = new System.Windows.Forms.DateTimePicker();
@@ -50,7 +51,8 @@
             this.olv_day_entries = new BrightIdeasSoftware.ObjectListView();
             this.olv_imported = new BrightIdeasSoftware.ObjectListView();
             this.columnButtonRenderer1 = new BrightIdeasSoftware.ColumnButtonRenderer();
-            this.btn_export_current_period = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.olv_timesheet_overview = new BrightIdeasSoftware.ObjectListView();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -62,12 +64,15 @@
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv_day_entries)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.olv_imported)).BeginInit();
+            this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.olv_timesheet_overview)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -88,6 +93,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Report";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btn_export_current_period
+            // 
+            this.btn_export_current_period.Location = new System.Drawing.Point(1162, 3);
+            this.btn_export_current_period.Name = "btn_export_current_period";
+            this.btn_export_current_period.Size = new System.Drawing.Size(104, 23);
+            this.btn_export_current_period.TabIndex = 78;
+            this.btn_export_current_period.Text = "Export to CSV";
+            this.btn_export_current_period.UseVisualStyleBackColor = true;
+            this.btn_export_current_period.Click += new System.EventHandler(this.btn_export_current_period_Click);
             // 
             // lbl_report_summary
             // 
@@ -319,15 +334,34 @@
             // 
             this.columnButtonRenderer1.ButtonPadding = new System.Drawing.Size(10, 10);
             // 
-            // btn_export_current_period
+            // tabPage3
             // 
-            this.btn_export_current_period.Location = new System.Drawing.Point(1162, 3);
-            this.btn_export_current_period.Name = "btn_export_current_period";
-            this.btn_export_current_period.Size = new System.Drawing.Size(104, 23);
-            this.btn_export_current_period.TabIndex = 78;
-            this.btn_export_current_period.Text = "Export to CSV";
-            this.btn_export_current_period.UseVisualStyleBackColor = true;
-            this.btn_export_current_period.Click += new System.EventHandler(this.btn_export_current_period_Click);
+            this.tabPage3.Controls.Add(this.olv_timesheet_overview);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(1269, 681);
+            this.tabPage3.TabIndex = 1;
+            this.tabPage3.Text = "TSN Overview";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // olv_timesheet_overview
+            // 
+            this.olv_timesheet_overview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.olv_timesheet_overview.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.olv_timesheet_overview.CellEditUseWholeCell = false;
+            this.olv_timesheet_overview.Cursor = System.Windows.Forms.Cursors.Default;
+            this.olv_timesheet_overview.FullRowSelect = true;
+            this.olv_timesheet_overview.GridLines = true;
+            this.olv_timesheet_overview.HideSelection = false;
+            this.olv_timesheet_overview.Location = new System.Drawing.Point(6, 6);
+            this.olv_timesheet_overview.Name = "olv_timesheet_overview";
+            this.olv_timesheet_overview.Size = new System.Drawing.Size(1255, 669);
+            this.olv_timesheet_overview.TabIndex = 72;
+            this.olv_timesheet_overview.UseCompatibleStateImageBehavior = false;
+            this.olv_timesheet_overview.View = System.Windows.Forms.View.Details;
             // 
             // frm_dashboard
             // 
@@ -351,6 +385,8 @@
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.olv_day_entries)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.olv_imported)).EndInit();
+            this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.olv_timesheet_overview)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -380,5 +416,7 @@
         private System.Windows.Forms.Label lbl_report_summary;
         private System.Windows.Forms.Button btn_export_current_period;
         private BrightIdeasSoftware.ColumnButtonRenderer columnButtonRenderer1;
+        private System.Windows.Forms.TabPage tabPage3;
+        private BrightIdeasSoftware.ObjectListView olv_timesheet_overview;
     }
 }

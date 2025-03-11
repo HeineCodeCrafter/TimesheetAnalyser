@@ -2,6 +2,7 @@
 using Microsoft.Office.Interop.Excel;
 using OfficeOpenXml;
 using ScottPlot;
+using ScottPlot.TickGenerators.Financial;
 using ScottPlot.TickGenerators.TimeUnits;
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,16 @@ namespace VisualizedTimeSheets.Views
     {
         List<TSA_Day> Days = new List<TSA_Day>();
         List<TSA_Day> ReportDays = new List<TSA_Day>();
+        List<TSA_Overview> OverviewSummary = new List<TSA_Overview>();
 
         double Report_TimeSummary_Comp = 0.0;
         double Report_TimeSummary_OvertimeS = 0.0;
         double Report_TimeSummary_OvertimeQ = 0.0;
-        double Report_TimeSummary_Vacation = 0.0; 
+        double Report_TimeSummary_Vacation = 0.0;
 
-        string data_directory = @"C:\Programmering\repo\HeineCodeCrafter\workfolder\Timesheets";
+        //string data_directory = @"C:\Programmering\repo\HeineCodeCrafter\workfolder\Timesheets";
+        
+        string data_directory = @"C:\Users\tom25\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
         public frm_dashboard()
         {
             InitializeComponent();
@@ -41,12 +45,11 @@ namespace VisualizedTimeSheets.Views
 
             Visualization_Formation();
 
+            
+
             ImportData(data_directory);
 
-
-
-            //dtp_report_start.Value = Days.FirstOrDefault().TimeStamp;
-            //dtp_report_end.Value = Days.LastOrDefault().TimeStamp;
+             
 
             // Get the first day of the last month
             dtp_report_start.Value = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddMonths(-1);
@@ -59,20 +62,26 @@ namespace VisualizedTimeSheets.Views
         private void UpdateDataVisualisation()
         {
             //olv_imported.SetObjects(Days);
-            olv_imported.Update();
             olv_day_entries.Update();
 
+            olv_imported.Update();
             if (olv_imported.SelectedIndex < 0)
             {
                 olv_imported.SelectedIndex = 0;
             }
 
-            olv_report_days.Update(); 
+            olv_report_days.Update();
+            olv_report_days.AutoSizeColumns();
             if (olv_report_days.SelectedIndex < 0)
             {
                 olv_report_days.SelectedIndex = 0;
             }
+             
             olv_report_selcted_index.Update();
+            olv_report_selcted_index.AutoSizeColumns();
+             
+            olv_timesheet_overview.Update();
+            olv_timesheet_overview.AutoSizeColumns();
 
         }
 
@@ -150,8 +159,7 @@ namespace VisualizedTimeSheets.Views
 
             #region Report
 
-            olv_report_days.AllColumns.Clear();
-            olv_report_days.AllColumns.Clear();
+            olv_report_days.AllColumns.Clear(); 
 
             olv_report_days.ShowGroups = false;
             olv_report_days.FullRowSelect = true;
@@ -209,6 +217,24 @@ namespace VisualizedTimeSheets.Views
 
             #endregion
 
+            #region Time Sheet Overview
+             
+            olv_timesheet_overview.AllColumns.Clear();
+
+            olv_timesheet_overview.ShowGroups = false;
+            olv_timesheet_overview.FullRowSelect = true;
+            olv_timesheet_overview.MultiSelect = false;
+            olv_timesheet_overview.HideSelection = false;
+            olv_timesheet_overview.HeaderUsesThemes = false;
+            olv_timesheet_overview.EmptyListMsg = $"Listen er tom..";
+            olv_timesheet_overview.AllColumns.Add(new OLVColumn() { Text = "TSN", MinimumWidth = 120, AspectName = "TSN", ToolTipText = "TSN" }); 
+            olv_timesheet_overview.AllColumns.Add(new OLVColumn() { Text = "In", MinimumWidth = 10, CheckBoxes=true, AspectName = "Imported", ToolTipText = "Imported" });
+            olv_timesheet_overview.AllColumns.Add(new OLVColumn() { Text = "Total", MinimumWidth = 75, AspectName = "Total", ToolTipText = "Total hours", FillsFreeSpace = true });
+            olv_timesheet_overview.PrimarySortColumn = olv_timesheet_overview.GetColumn("TSN");
+            
+
+            olv_timesheet_overview.RebuildColumns();
+            #endregion
         }
 
         #region GUI Events
@@ -249,6 +275,8 @@ namespace VisualizedTimeSheets.Views
         {
             Days = new List<TSA_Day>();
             List<string> directories = Directory.GetDirectories(directory_path).ToList();
+
+            ImportOverview(directory_path);
 
             //Console.WriteLine("Subfolders:");
             foreach (string dir in directories)
@@ -339,6 +367,9 @@ namespace VisualizedTimeSheets.Views
                                                 TSA_Day day = new TSA_Day();
                                                 day.TimeStamp = datetime;
                                                 day.FoundIn = fileName;
+                                                var tsa_overview = OverviewSummary.Find(t => t.TSN == day.FoundIn);
+                                                tsa_overview.Imported = true;
+
                                                 day.TimeRegister.Add(current_time);
 
                                                 //Console.WriteLine($"Added {day.TimeStamp:dd.MM.yyyy}.");
@@ -366,7 +397,40 @@ namespace VisualizedTimeSheets.Views
             Days = Days.OrderBy(d => d.TimeStamp).ToList();
 
             olv_imported.SetObjects(Days);
+            olv_timesheet_overview.SetObjects(OverviewSummary);
             UpdateDataVisualisation();
+        }
+
+        private void ImportOverview(string directory_path)
+        {
+            OverviewSummary = new List<TSA_Overview>();
+            string file = Path.Combine(directory_path, $"TSA_Overview.xlsx");
+              
+            using (var package = new ExcelPackage(new FileInfo(file)))
+            {
+                try
+                {
+                    ExcelWorksheet worksheet = package.Workbook.Worksheets[0]; // Assuming the data is in the first sheet
+
+                    for (int row = 2; row <= worksheet.Dimension.End.Row; row++)
+                    { 
+                        TSA_Overview tsa_overview = new TSA_Overview();
+                        tsa_overview.TSN = $"{worksheet.Cells[row, 1].Text}";
+                        tsa_overview.Resource = $"{worksheet.Cells[row, 2].Text}";
+                        tsa_overview.PeriodStart = DateTime.Parse($"{worksheet.Cells[row, 3].Text}");
+                        tsa_overview.PeriodEnd = DateTime.Parse($"{worksheet.Cells[row, 4].Text}");
+                        tsa_overview.Approval = $"{worksheet.Cells[row, 5].Text}"; 
+                        tsa_overview.Total = $"{worksheet.Cells[row, 6].Text}";
+                        tsa_overview.Imported = false;
+                        OverviewSummary.Add(tsa_overview); 
+
+                    }
+
+                }
+                catch (Exception ignored) { }
+            }
+             
+            olv_timesheet_overview.SetObjects(OverviewSummary);
         }
 
         private void label3_Click(object sender, EventArgs e)

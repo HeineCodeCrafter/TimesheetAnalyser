@@ -8,12 +8,13 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>VisualizedTimeSheets</RootNamespace>
     <AssemblyName>VisualizedTimeSheets</AssemblyName>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -125,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\TSA_Day.cs" />
+    <Compile Include="Models\TSA_Overview.cs" />
     <Compile Include="Models\TSA_Plot.cs" />
     <Compile Include="Models\TSA_Project.cs" />
     <Compile Include="Models\TSA_Time.cs" />
@@ -145,6 +147,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Views\frm_dashboard.resx">
       <DependentUpon>frm_dashboard.cs</DependentUpon>
