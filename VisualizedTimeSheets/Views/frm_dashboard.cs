@@ -36,7 +36,7 @@ namespace VisualizedTimeSheets.Views
 
         //string data_directory = @"C:\Programmering\repo\HeineCodeCrafter\workfolder\Timesheets";
         
-        string data_directory = @"C:\Users\tom25\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
+        string data_directory = @"C:\Users\tomhe\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
         public frm_dashboard()
         {
             InitializeComponent();
