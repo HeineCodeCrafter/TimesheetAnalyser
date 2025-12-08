@@ -50,9 +50,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.olv_day_entries = new BrightIdeasSoftware.ObjectListView();
             this.olv_imported = new BrightIdeasSoftware.ObjectListView();
-            this.columnButtonRenderer1 = new BrightIdeasSoftware.ColumnButtonRenderer();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.olv_timesheet_overview = new BrightIdeasSoftware.ObjectListView();
+            this.columnButtonRenderer1 = new BrightIdeasSoftware.ColumnButtonRenderer();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -164,6 +164,9 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.olv_report_selcted_index);
             this.groupBox3.Controls.Add(this.olv_report_days);
             this.groupBox3.Location = new System.Drawing.Point(8, 83);
@@ -330,10 +333,6 @@
             this.olv_imported.MouseClick += new System.Windows.Forms.MouseEventHandler(this.olv_imported_MouseClick);
             this.olv_imported.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.olv_imported_MouseDoubleClick);
             // 
-            // columnButtonRenderer1
-            // 
-            this.columnButtonRenderer1.ButtonPadding = new System.Drawing.Size(10, 10);
-            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.olv_timesheet_overview);
@@ -362,6 +361,10 @@
             this.olv_timesheet_overview.TabIndex = 72;
             this.olv_timesheet_overview.UseCompatibleStateImageBehavior = false;
             this.olv_timesheet_overview.View = System.Windows.Forms.View.Details;
+            // 
+            // columnButtonRenderer1
+            // 
+            this.columnButtonRenderer1.ButtonPadding = new System.Drawing.Size(10, 10);
             // 
             // frm_dashboard
             // 

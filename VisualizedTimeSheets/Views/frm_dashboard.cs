@@ -36,7 +36,11 @@ namespace VisualizedTimeSheets.Views
 
         //string data_directory = @"C:\Programmering\repo\HeineCodeCrafter\workfolder\Timesheets";
         
-        string data_directory = @"C:\Users\tom25\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
+        // Privat
+        //string data_directory = @"C:\Users\tom25\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
+        
+        // Jobb PC
+        string data_directory = @"C:\Users\tom.saether\OneDrive - Nordomatic Group\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
         public frm_dashboard()
         {
             InitializeComponent();
@@ -404,7 +408,7 @@ namespace VisualizedTimeSheets.Views
         private void ImportOverview(string directory_path)
         {
             OverviewSummary = new List<TSA_Overview>();
-            string file = Path.Combine(directory_path, $"TSA_Overview.xlsx");
+            string file = Path.Combine(directory_path, $"TSN_Overview.xlsx");
               
             using (var package = new ExcelPackage(new FileInfo(file)))
             {
