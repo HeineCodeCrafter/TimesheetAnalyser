@@ -40,7 +40,8 @@ namespace VisualizedTimeSheets.Views
         //string data_directory = @"C:\Users\tom25\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
         
         // Jobb PC
-        string data_directory = @"C:\Users\tom.saether\OneDrive - Nordomatic Group\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
+        //string data_directory = @"C:\Users\tom.saether\OneDrive - Nordomatic Group\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
+
         public frm_dashboard()
         {
             InitializeComponent();
