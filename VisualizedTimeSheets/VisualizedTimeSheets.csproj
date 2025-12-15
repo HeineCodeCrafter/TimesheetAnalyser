@@ -125,6 +125,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Helper\TSA_Settings.cs" />
     <Compile Include="Models\TSA_Day.cs" />
     <Compile Include="Models\TSA_Overview.cs" />
     <Compile Include="Models\TSA_Plot.cs" />

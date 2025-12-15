@@ -18,6 +18,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VisualizedTimeSheets.Models;
+using VisualizedTimeSheets.Models.Helper;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using Color = System.Drawing.Color;
 
@@ -40,12 +41,16 @@ namespace VisualizedTimeSheets.Views
         //string data_directory = @"C:\Users\tom25\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
         
         // Jobb PC
-        //string data_directory = @"C:\Users\tom.saether\OneDrive - Nordomatic Group\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
+        string data_directory = @"C:\Users\tom.saether\OneDrive - Nordomatic Group\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
 
         public frm_dashboard()
         {
             InitializeComponent();
-             
+            TSA_Settings.Load();
+
+            dtp_comp_time_due_date.Value = TSA_Settings.Comptime_OFS_Due_Date;
+            nud_offset_comptime.Value = TSA_Settings.Comptime_OFS;
+
             txt_dataDirectory.Text = data_directory;
 
             Visualization_Formation();
@@ -450,6 +455,9 @@ namespace VisualizedTimeSheets.Views
 
         private void CreateReport()
         {
+            TSA_Settings.Comptime_OFS = nud_offset_comptime.Value;
+            TSA_Settings.Comptime_OFS_Due_Date = dtp_comp_time_due_date.Value;
+
             DateTime start = dtp_report_start.Value;
             DateTime end = dtp_report_end.Value;
             ReportDays = Days.FindAll(d => d.TimeStamp>= start && d.TimeStamp <= end).ToList();
@@ -457,6 +465,7 @@ namespace VisualizedTimeSheets.Views
             olv_report_days.SetObjects(ReportDays);
             VisualizeHourTypes();
             ReportSummary();
+
         }
 
         private void VisualizeHourTypes()
