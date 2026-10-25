@@ -37,11 +37,11 @@ namespace VisualizedTimeSheets.Views
 
         //string data_directory = @"C:\Programmering\repo\HeineCodeCrafter\workfolder\Timesheets";
         
-        // Privat
-        //string data_directory = @"C:\Users\tom25\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
+        // Privat\2026
+        string data_directory = @"C:\Users\tomhe\OneDrive\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
         
         // Jobb PC
-        string data_directory = @"C:\Users\tom.saether\OneDrive - Nordomatic Group\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
+        //string data_directory = @"C:\Users\tom.saether\OneDrive - Nordomatic Group\Dokumenter\Workfolder\TimeSheetAnalyser\Timesheets";
 
         public frm_dashboard()
         {
