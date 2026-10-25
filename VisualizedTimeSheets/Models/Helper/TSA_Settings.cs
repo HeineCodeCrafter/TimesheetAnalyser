@@ -51,7 +51,7 @@ namespace VisualizedTimeSheets.Models.Helper
         {
 
             Directory.CreateDirectory(FolderPath);
-
+            System.Diagnostics.Process.Start(FolderPath);
             var data = new SettingsData
             {
                 Comptime_OFS_Due_Date = Comptime_OFS_Due_Date,

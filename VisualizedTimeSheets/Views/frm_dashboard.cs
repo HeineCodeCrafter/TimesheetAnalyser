@@ -455,8 +455,6 @@ namespace VisualizedTimeSheets.Views
 
         private void CreateReport()
         {
-            TSA_Settings.Comptime_OFS = nud_offset_comptime.Value;
-            TSA_Settings.Comptime_OFS_Due_Date = dtp_comp_time_due_date.Value;
 
             DateTime start = dtp_report_start.Value;
             DateTime end = dtp_report_end.Value;
@@ -521,12 +519,14 @@ namespace VisualizedTimeSheets.Views
 
         private void nud_offset_comptime_ValueChanged(object sender, EventArgs e)
         {
+            TSA_Settings.Comptime_OFS = nud_offset_comptime.Value;
             CreateReport();
         }
 
         private void dtp_comp_time_due_date_ValueChanged(object sender, EventArgs e)
         {
 
+            TSA_Settings.Comptime_OFS_Due_Date = dtp_comp_time_due_date.Value;
             CreateReport();
         }
         private void dtp_report_start_ValueChanged(object sender, EventArgs e)

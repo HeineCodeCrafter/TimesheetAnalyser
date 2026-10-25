@@ -243,6 +243,11 @@
             0,
             65536});
             this.nud_offset_comptime.Location = new System.Drawing.Point(114, 23);
+            this.nud_offset_comptime.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.nud_offset_comptime.Name = "nud_offset_comptime";
             this.nud_offset_comptime.Size = new System.Drawing.Size(74, 20);
             this.nud_offset_comptime.TabIndex = 80;
